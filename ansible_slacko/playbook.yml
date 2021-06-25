@@ -1,0 +1,50 @@
+- hosts: remoto
+  gather_facts: False
+
+  tasks:
+  - name: Git checkout do projeto
+    ansible.builtin.git:
+      repo: 'https://github.com/LeonardoDG2084/iaac_slacko-api.git'
+      dest: /opt/slacko-api
+      version: master
+
+  - name: Instalando python3
+    apt:
+      name: python3 
+      update_cache: yes
+      state: present
+
+  - name: Instalando python3-pip
+    apt:
+      name: python3-pip 
+      update_cache: yes
+      state: present
+      
+  - name: Instalando mongoDB
+    apt:
+      name: mongodb 
+      update_cache: yes
+      state: present
+
+  - name: Iniciando o serviço mongodb
+    ansible.builtin.service:
+      name: mongodb
+      state: started
+      
+  - name: Rodando requeriments.txt
+    pip:
+      requirements: /opt/slacko-api/requeriments.txt
+
+  - name: Criando o serviço
+    copy:
+      src: slacko-api.service
+      dest: /etc/systemd/system
+      owner: root
+      group: root
+
+  - name: Iniciando o slacko-api
+    ansible.builtin.service:
+      name: slacko-api
+      state: started
+      enabled: yes
+     
