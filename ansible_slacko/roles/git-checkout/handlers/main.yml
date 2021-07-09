@@ -1,0 +1,29 @@
+---
+    - name: Rodando requeriments.txt
+      pip:
+        requirements: '{{ slacko_path }}/requeriments.txt'
+
+    - name: Copiar o sh init
+      template:
+        src: start-api.sh.j2
+        dest: '{{ slacko_path }}/start-api.sh'
+        mode: '0755'
+        
+    - name: Criar Service
+      template:
+        src: slacko-api.service.j2
+        dest: /etc/systemd/system/slacko-api.service
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Habilitar servico slacko-api
+      service:
+        name: slacko-api
+        enabled: yes
+        daemon_reload: yes
+    
+    - name: Reiniciar slacko-api
+      service:
+        name: slacko-api
+        state: restarted

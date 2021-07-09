@@ -1,0 +1,7 @@
+---
+  - name: Instalando mongoDB
+    apt:
+      name: mongodb 
+      update_cache: yes
+      state: present
+    notify: Iniciar mongoDB

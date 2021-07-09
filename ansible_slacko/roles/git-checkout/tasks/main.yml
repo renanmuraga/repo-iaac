@@ -1,0 +1,14 @@
+---
+  - name: Git checkout do projeto
+    ansible.builtin.git:
+      repo: 'https://github.com/LeonardoDG2084/iaac_slacko-api.git'
+      dest: '{{ slacko_path }}'
+      version: master
+    notify:
+      - Rodando requeriments.txt
+      - Copiar o sh init
+      - Criar Service
+      - Habilitar servico slacko-api
+      - Reiniciar slacko-api      
+    tags:
+      - instala-projeto
